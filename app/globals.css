@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #020b12;
+  --bg-secondary: #040f1a;
+  --bg-card: #071828;
+  --accent-cyan: #00e5ff;
+  --accent-green: #00ff9d;
+  --accent-purple: #7b2fff;
+  --text-primary: #e8f4f8;
+  --text-muted: #4a7a8a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: #020b12;
+  color: #e8f4f8;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #020b12; }
+::-webkit-scrollbar-thumb { background: #00e5ff; border-radius: 2px; }
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.glow-cyan { text-shadow: 0 0 20px rgba(0,229,255,0.6), 0 0 40px rgba(0,229,255,0.3); }
+.box-glow { box-shadow: 0 0 20px rgba(0,229,255,0.1), inset 0 0 20px rgba(0,229,255,0.03); }
+.font-mono-tech { font-family: 'Share Tech Mono', monospace; }
+.font-orbitron { font-family: 'Orbitron', monospace; }
+
+.gradient-text {
+  background: linear-gradient(135deg, #00e5ff, #00ff9d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.neon-border { border: 1px solid rgba(0,229,255,0.2); }
+
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+.cursor { animation: blink 1s infinite; }
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+.scanline {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.25), transparent);
+  animation: scan 8s linear infinite;
+  pointer-events: none; z-index: 9999;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(30px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.fade-up { animation: fadeUp 0.7s ease forwards; }
+
+.hex-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66z' fill='none' stroke='rgba(0,229,255,0.05)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 56px 100px;
+}
