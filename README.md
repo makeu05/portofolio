@@ -14,9 +14,7 @@ to analyse their behaviour. I design technical tools and experiment with cyberse
 and network architecture. My approach relies on experimentation, technical analysis and building tools
 whose behaviour can be explained and verified.
 
-I am a final-year engineering student in cybersecurity and digital forensics, degree expected in 2027.
-I am looking for a 5 to 6 month end-of-studies internship from February 2027, in network and system
-security, with a doctorate in view.
+
 
 ### How I work
 
@@ -85,9 +83,6 @@ la cybersécurité, de l'investigation numérique et des architectures réseau. 
 l'expérimentation, l'analyse technique et la conception d'outils dont le fonctionnement peut être
 expliqué et vérifié.
 
-Je suis élève-ingénieure en dernière année en cybersécurité et investigation numérique, diplôme prévu
-en 2027. Je recherche un stage de fin d'études de 5 à 6 mois à partir de février 2027, en sécurité des
-réseaux et des systèmes, en vue d'un doctorat.
 
 ### Ma manière de travailler
 
