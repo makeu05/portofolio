@@ -1,76 +1,217 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/*
+ * Colour roles. Names follow the dark palette, values swap with the theme:
+ *   midnight = page background   slate = raised surface   ink = main text
+ *   steel = secondary text       cyan = accent             line = hairlines
+ * Dark: Midnight Navy, Deep Slate, Soft White, Steel Gray, Electric Cyan.
+ * Light: Soft White background and Midnight Navy text. Steel and cyan are
+ * darkened so that text keeps at least 4.5:1 contrast on the light surfaces.
+ * Muted Bordeaux is the same in both themes and never carries text.
+ */
 :root {
-  --bg-primary: #020b12;
-  --bg-secondary: #040f1a;
-  --bg-card: #071828;
-  --accent-cyan: #00e5ff;
-  --accent-green: #00ff9d;
-  --accent-purple: #7b2fff;
-  --text-primary: #e8f4f8;
-  --text-muted: #4a7a8a;
+  --c-bg: #0b1220;
+  --c-surface: #142238;
+  --c-fg: #f4f7fb;
+  --c-muted: #a7b3c5;
+  --c-accent: #00c2ff;
+  --c-line: #243651;
+  --scheme: dark;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  background-color: #020b12;
-  color: #e8f4f8;
-  font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
+:root[data-theme="light"] {
+  --c-bg: #f4f7fb;
+  --c-surface: #e8eef6;
+  --c-fg: #0b1220;
+  --c-muted: #46566e;
+  --c-accent: #006a99;
+  --c-line: #cdd7e5;
+  --scheme: light;
 }
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #020b12; }
-::-webkit-scrollbar-thumb { background: #00e5ff; border-radius: 2px; }
-
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
+/* Without script, follow the system preference. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --c-bg: #f4f7fb;
+    --c-surface: #e8eef6;
+    --c-fg: #0b1220;
+    --c-muted: #46566e;
+    --c-accent: #006a99;
+    --c-line: #cdd7e5;
+    --scheme: light;
+  }
 }
 
-.glow-cyan { text-shadow: 0 0 20px rgba(0,229,255,0.6), 0 0 40px rgba(0,229,255,0.3); }
-.box-glow { box-shadow: 0 0 20px rgba(0,229,255,0.1), inset 0 0 20px rgba(0,229,255,0.03); }
-.font-mono-tech { font-family: 'Share Tech Mono', monospace; }
-.font-orbitron { font-family: 'Orbitron', monospace; }
+@theme inline {
+  --color-midnight: var(--c-bg);
+  --color-slate: var(--c-surface);
+  --color-ink: var(--c-fg);
+  --color-steel: var(--c-muted);
+  --color-cyan: var(--c-accent);
+  --color-line: var(--c-line);
+  --color-bordeaux: #7a263a;
+  /* Fixed light tone, for text placed on Muted Bordeaux. */
+  --color-paper: #f4f7fb;
 
-.gradient-text {
-  background: linear-gradient(135deg, #00e5ff, #00ff9d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
 }
 
-.neon-border { border: 1px solid rgba(0,229,255,0.2); }
+@layer base {
+  html {
+    background-color: var(--color-midnight);
+    color-scheme: var(--scheme);
+  }
 
-@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
-.cursor { animation: blink 1s infinite; }
+  body {
+    background-color: var(--color-midnight);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
 
-@keyframes scan {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+  ::selection {
+    background-color: var(--color-cyan);
+    color: var(--color-midnight);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 }
-.scanline {
-  position: fixed; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.25), transparent);
-  animation: scan 8s linear infinite;
-  pointer-events: none; z-index: 9999;
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(30px); }
-  to { opacity:1; transform:translateY(0); }
-}
-.fade-up { animation: fadeUp 0.7s ease forwards; }
+/*
+ * Entrance animations. They play once and never loop (except the short
+ * highlight on the home figure). Everything is declared inside this query,
+ * so with reduced motion, or without CSS animation, all content is visible.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .anim-up {
+    animation: anim-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes anim-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 
-.hex-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34L28 66z' fill='none' stroke='rgba(0,229,255,0.05)' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: 56px 100px;
+  .eg-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: eg-draw 1.3s ease-out both;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes eg-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .eg-fade {
+    animation: eg-fade 0.6s ease-out both;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes eg-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Two soft rings around the modified event, then still. */
+  .eg-ping {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: eg-ping 1.8s ease-out 2 both;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes eg-ping {
+    0% {
+      opacity: 0;
+      transform: scale(1);
+    }
+    15% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(3.4);
+    }
+  }
+
+  /* Added by the Reveal component only to blocks that start below the fold. */
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s ease-out,
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal-pending.reveal-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Inline code inside running text */
+.rich code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--color-ink);
+  background-color: var(--color-slate);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  padding: 0.08em 0.38em;
+  overflow-wrap: anywhere;
+}
+
+/* Theme toggle: show the icon of the theme the button will switch to. */
+.theme-icon-moon {
+  display: none;
+}
+:root[data-theme="light"] .theme-icon-sun {
+  display: none;
+}
+:root[data-theme="light"] .theme-icon-moon {
+  display: block;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .theme-icon-sun {
+    display: none;
+  }
+  :root:not([data-theme]) .theme-icon-moon {
+    display: block;
+  }
 }

@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+Personal portfolio of MAKEU TENKU STELY BELVA, cybersecurity and digital forensics engineer.
+Bilingual (English and French), static pages generated with Next.js.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000, redirects to /en or /fr
+npm run build      # production build
+npm run start      # serve the production build
+npm run lint
+npx tsc --noEmit
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where to edit
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Everything a visitor reads or clicks comes from `content/`. No text is written in the components.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| File | Content |
+|---|---|
+| `content/site.ts` | name, email, GitHub, LinkedIn, résumé path, repository URLs |
+| `content/en.ts`, `content/fr.ts` | all interface text, one dictionary per language, checked against `content/types.ts` |
+| `content/projects.ts` | project list shown on the home page (set `hidden: true` to unpublish one) |
+| `content/details/forenc.ts`, `content/details/locard.ts` | full write-ups, in both languages |
+| `public/cv/` | résumé PDF |
 
-## Learn More
+To add a detailed study: create `content/details/<slug>.ts`, register it in `content/details/index.ts`,
+and set `detail: true` on the matching entry in `content/projects.ts`.
 
-To learn more about Next.js, take a look at the following resources:
+To replace the résumé, put the new PDF in `public/cv/` and update `cv` in `content/site.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Themes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Dark and light themes. The first visit follows the system setting, the toggle in the header saves
+the choice in the browser. Colours are defined once in `app/globals.css` as roles (background,
+surface, text, secondary text, accent, line). The light accent and secondary text are darker than
+their dark equivalents so text keeps at least 4.5:1 contrast. Muted Bordeaux is identical in both
+themes and is never used for text.
 
-## Deploy on Vercel
+## Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+app/[lang]/          pages (home, project studies), layout, not-found, error, social image
+app/sitemap.ts       sitemap with language alternates
+proxy.ts             sends / to /en or /fr from the Accept-Language header
+components/          display components, no content
+content/             all text and data
+lib/i18n.ts          language helpers
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy
+
+Set `NEXT_PUBLIC_SITE_URL` to the public address (for example `https://example.org`) so that
+canonical links, the sitemap and the social image use it. Any host that runs Next.js works.
+The site needs a server runtime for `proxy.ts` (language redirect on `/`).
+
+## Editorial rules used for the text
+
+No em dashes, no percentages for skill levels, no school name, grades or ranking, and no project
+that cannot be checked. Where a feature is planned or unfinished, the page says so.
